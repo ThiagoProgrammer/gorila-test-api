@@ -25,7 +25,7 @@ export class InvestmentsController {
     @Body() investment: InvestmentDto,
     @Request() req,
   ): Promise<InvestmentEntity> {
-    // create a new post and return the newly created post
+    console.log(investment);
     return await this.investmentsService.create(investment, req.user.id);
   }
   @UseGuards(AuthGuard('jwt'))
@@ -43,6 +43,6 @@ export class InvestmentsController {
       throw new NotFoundException('Esse investimento não existe!');
     }
 
-    return 'Investimento removido com sucesso!';
+    return { message: 'Investimento removido com sucesso!' };
   }
 }

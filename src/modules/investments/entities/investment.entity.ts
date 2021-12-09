@@ -20,7 +20,7 @@ export class Investment extends Model<Investment> {
     type: DataType.TEXT,
     allowNull: false,
   })
-  Date: Date;
+  date: string;
 
   @ForeignKey(() => User)
   @Column({

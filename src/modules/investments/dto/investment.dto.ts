@@ -9,7 +9,7 @@ export class InvestmentDto {
   readonly value: number;
 
   @IsNotEmpty()
-  readonly date: Date;
+  readonly date: string;
 
   @IsEnum(Type, {
     message: 'Os tipos devem ser Renda Fixa ou Variável',

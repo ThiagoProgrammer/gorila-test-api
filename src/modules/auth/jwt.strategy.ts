@@ -14,13 +14,20 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: any) {
-    // check if user in the token actually exist
-    const user = await this.userService.findOneById(payload.id);
-    if (!user) {
-      throw new UnauthorizedException(
-        'You are not authorized to perform the operation',
-      );
+    console.log(payload);
+    let user = null;
+    try {
+      user = await this.userService.findOneById(payload.id);
+    } catch (error) {
+      throw new UnauthorizedException();
+    } finally {
+      if (!user) {
+        throw new UnauthorizedException(
+          'Você não tem permissão para acessar este recurso',
+        );
+      }
     }
+
     return payload;
   }
 }

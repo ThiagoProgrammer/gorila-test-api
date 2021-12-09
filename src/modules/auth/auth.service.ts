@@ -1,3 +1,4 @@
+import { UserDto } from './../users/dto/user.dto';
 import { Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { JwtService } from '@nestjs/jwt';
@@ -10,42 +11,37 @@ export class AuthService {
     private readonly jwtService: JwtService,
   ) {}
 
-  async validateUser(email: string, pass: string) {
-    // find if user exist with this email
-    const user = await this.userService.findOneByEmail(email);
-    if (!user) {
-      return null;
+  async validateUser(user: UserDto) {
+    const userExist: any = await this.userService.findOneByEmail(user.email);
+    if (!userExist) {
+      return false;
     }
+    console.log(userExist);
+    const match = await this.comparePassword(user.password, userExist.password);
 
-    // find if user password match
-    const match = await this.comparePassword(pass, user.password);
-    if (!match) {
-      return null;
-    }
-
-    // tslint:disable-next-line: no-string-literal
-    const { password, ...result } = user['dataValues'];
-    return result;
+    return match ? userExist : false;
   }
 
-  public async login(user) {
-    const token = await this.generateToken(user);
-    return { user, token };
+  public async login(user: UserDto) {
+    const userValid = await this.validateUser(user);
+    userValid.password = undefined;
+    if (!userValid) return { error: 'Usuario ou senha Invalida!' };
+    const token = await this.generateToken(userValid);
+
+    return { user: userValid, token };
   }
 
   public async create(user) {
     const pass = await this.hashPassword(user.password);
+    const resp = await this.userService.create({ ...user, password: pass });
+    const newUser = resp['dataValues'];
+    newUser.password = undefined;
+    const token = await this.generateToken(newUser);
 
-    const newUser = await this.userService.create({ ...user, password: pass });
-
-    const { password, ...result } = newUser['dataValues'];
-
-    const token = await this.generateToken(result);
-
-    return { user: result, token };
+    return { user: newUser, token };
   }
 
-  private async generateToken(user) {
+  private async generateToken(user: UserDto) {
     const token = await this.jwtService.signAsync(user);
     return token;
   }
