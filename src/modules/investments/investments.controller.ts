@@ -31,7 +31,16 @@ export class InvestmentsController {
   @UseGuards(AuthGuard('jwt'))
   @Get()
   async findAll(@Request() req) {
-    return await this.investmentsService.findAll(req.user.id);
+    const investments = await this.investmentsService.findAll(req.user.id);
+    return {
+      items: investments,
+      totalRendaFixa: investments
+        .filter((x) => x.type.includes('RENDA_FIXA'))
+        .reduce((acc: any, curr) => acc + curr.value, 0),
+      totalRendaVariavel: investments
+        .filter((x) => x.type.includes('RENDA_VARIAVEL'))
+        .reduce((acc: any, curr) => acc + curr.value, 0),
+    };
   }
 
   @UseGuards(AuthGuard('jwt'))

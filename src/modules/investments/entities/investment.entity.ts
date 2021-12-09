@@ -11,10 +11,10 @@ import { User } from '../../users/user.entity';
 @Table
 export class Investment extends Model<Investment> {
   @Column({
-    type: DataType.STRING,
+    type: DataType.DOUBLE,
     allowNull: false,
   })
-  value: string;
+  value: number;
 
   @Column({
     type: DataType.TEXT,

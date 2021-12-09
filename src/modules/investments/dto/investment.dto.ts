@@ -1,7 +1,7 @@
 import { IsEnum, IsNotEmpty, MinLength } from 'class-validator';
 enum Type {
-  MALE = 'male',
-  FEMALE = 'female',
+  'RENDA_VARIAVEL',
+  'RENDA_FIXA',
 }
 export class InvestmentDto {
   @IsNotEmpty()
