@@ -4,7 +4,7 @@
 
 ## Description
 
-API REST com autenticação via JWT(Json Web Token) para o projeto teste carteira gorila
+API REST com autenticação via JWT(Json Web Token) e Controle de investimentos para o projeto teste carteira gorila
 
 ## Instalação
 
