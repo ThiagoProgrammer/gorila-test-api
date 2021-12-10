@@ -25,7 +25,6 @@ export class InvestmentsController {
     @Body() investment: InvestmentDto,
     @Request() req,
   ): Promise<InvestmentEntity> {
-    console.log(investment);
     return await this.investmentsService.create(investment, req.user.id);
   }
   @UseGuards(AuthGuard('jwt'))

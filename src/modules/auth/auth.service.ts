@@ -16,7 +16,7 @@ export class AuthService {
     if (!userExist) {
       return false;
     }
-    console.log(userExist);
+
     const match = await this.comparePassword(user.password, userExist.password);
 
     return match ? userExist : false;
